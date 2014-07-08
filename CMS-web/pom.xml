@@ -28,6 +28,11 @@
     
     <dependencies>
         <dependency>
+            <groupId>hu.farcsal</groupId>
+            <artifactId>CMS-ejb</artifactId>
+            <version>0.1.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
