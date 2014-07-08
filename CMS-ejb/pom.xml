@@ -128,13 +128,13 @@
                 <artifactId>eclipselink-maven-plugin</artifactId>
                 <version>1.1-SNAPSHOT</version>
                 <executions>
-                    <execution>
+<!--                    <execution>
                         <id>weave</id>
                         <phase>process-classes</phase>
                         <goals>
                             <goal>weave</goal>
                         </goals>
-                    </execution>
+                    </execution>-->
                     <execution>
                         <id>modelgen</id>
                         <phase>generate-sources</phase>

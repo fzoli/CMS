@@ -1,0 +1,42 @@
+body {
+    margin: 0px;
+    padding: 0;
+    font-size: 12px;
+    color: #616161;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.ui-layout-unit-header, .ui-layout-unit-footer, .ui-breadcrumb {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+span.ui-autocomplete {
+    position: relative;
+    display: inline-block;
+    width: 206px; 
+}
+
+span.ui-autocomplete button.ui-button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: 32px;
+}
+
+span.ui-autocomplete input.ui-autocomplete-input {
+    width: 164px;
+}
