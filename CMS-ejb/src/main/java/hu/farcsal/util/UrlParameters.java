@@ -1,4 +1,4 @@
-package hu.farcsal.cms.util;
+package hu.farcsal.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

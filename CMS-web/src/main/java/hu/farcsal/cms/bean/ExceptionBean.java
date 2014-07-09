@@ -1,3 +1,5 @@
+package hu.farcsal.cms.bean;
+
 import java.sql.SQLException;
 
 import javax.faces.bean.ManagedBean;

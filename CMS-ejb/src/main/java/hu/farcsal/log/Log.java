@@ -1,4 +1,4 @@
-package hu.farcsal.cms.log;
+package hu.farcsal.log;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

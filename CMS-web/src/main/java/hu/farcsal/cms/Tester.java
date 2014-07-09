@@ -1,3 +1,5 @@
+package hu.farcsal.cms;
+
 import hu.farcsal.cms.bean.PageBeanLocal;
 import java.io.IOException;
 import java.io.PrintWriter;

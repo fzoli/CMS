@@ -1,5 +1,7 @@
+package hu.farcsal.cms.bean;
+
 import hu.farcsal.cms.bean.PageBeanLocal;
-import hu.farcsal.cms.log.Log;
+import hu.farcsal.log.Log;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

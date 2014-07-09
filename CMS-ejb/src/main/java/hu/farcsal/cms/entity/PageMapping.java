@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import hu.farcsal.cms.util.Strings;
+import hu.farcsal.util.Strings;
 
 /**
  *

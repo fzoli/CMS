@@ -1,4 +1,4 @@
-package jsf.prettyfaces;
+package hu.farcsal.util;
 
 import java.util.Iterator;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package hu.farcsal.cms.util;
+package hu.farcsal.util;
 
 import java.text.Normalizer;
 import java.util.List;
