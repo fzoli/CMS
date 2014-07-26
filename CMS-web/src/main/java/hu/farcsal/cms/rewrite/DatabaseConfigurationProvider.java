@@ -13,22 +13,16 @@ import java.util.List;
 import javax.faces.event.PhaseId;
 import javax.servlet.ServletContext;
 import org.ocpsoft.rewrite.annotation.RewriteConfiguration;
-import org.ocpsoft.rewrite.config.Condition;
-import org.ocpsoft.rewrite.config.ConditionBuilder;
 import org.ocpsoft.rewrite.config.Configuration;
 import org.ocpsoft.rewrite.config.ConfigurationBuilder;
 import org.ocpsoft.rewrite.config.ConfigurationRuleBuilder;
 import org.ocpsoft.rewrite.config.Invoke;
 import org.ocpsoft.rewrite.config.OperationBuilder;
 import org.ocpsoft.rewrite.config.Rule;
-import org.ocpsoft.rewrite.context.EvaluationContext;
 import org.ocpsoft.rewrite.el.El;
-import org.ocpsoft.rewrite.event.Rewrite;
-import org.ocpsoft.rewrite.faces.config.PhaseBinding;
 import org.ocpsoft.rewrite.faces.config.PhaseOperation;
 import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
 import org.ocpsoft.rewrite.servlet.config.rule.Join;
-import org.ocpsoft.rewrite.servlet.impl.HttpInboundRewriteImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -173,34 +167,7 @@ public class DatabaseConfigurationProvider extends HttpConfigurationProvider {
             }
         }
         
-        ConditionBuilder condition = null;
-        for (Page.Parameter param : params) {
-            final String name = param.getName();
-            final String var = param.getBeanVariable();
-            final String validator = param.getValidator();
-            if (link.contains(name)) {
-                if (var != null && !var.isEmpty()) {
-                    builder.where(name).bindsTo(PhaseBinding.to(El.property(var)).after(PhaseId.RESTORE_VIEW));
-                }
-                if (validator != null && !validator.isEmpty()) {
-                    condition = lngProcessor.and(new Condition() {
-
-                        @Override
-                        public boolean evaluate(Rewrite event, EvaluationContext context) {
-                            if (event instanceof HttpInboundRewriteImpl) {
-                                HttpInboundRewriteImpl ev = (HttpInboundRewriteImpl) event;
-                                System.out.println("addr: " + ev.getAddress());
-                            }
-                            return true;
-                        }
-                        
-                    });
-                }
-            }
-        }
-        condition = condition == null ? lngProcessor : condition.and(lngProcessor);
-        
-        builder.when(condition).perform(operation);
+        builder.when(lngProcessor).perform(operation);
         RewriteRuleCache.save(rule, cache);
         LOGGER.info("Mapping[{}]: {} -> {}", id, link, view);
     }
