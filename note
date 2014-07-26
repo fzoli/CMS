@@ -1,0 +1,15 @@
+drop tables
+------------
+
+drop table `shops`;
+drop table `page-filters`;
+drop table `domains`;
+drop table `page-params`;
+drop table `page-mappings`;
+drop table `site-mappings`;
+drop table `node-mappings`;
+drop table `sites`;
+drop table `pages`;
+drop table `nodes`;
+drop table `languages`;
+

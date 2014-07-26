@@ -219,6 +219,13 @@ public class LanguageBean implements Serializable{
     private String lngCodeCms;
     private Language lngCms;
     
+    private String test = "";
+
+    public void setTest(String test) {
+        System.out.println("setTest: " + test);
+        this.test = test;
+    }
+    
     public List<Language> getLanguages() {
         return bean.getLanguages();
     }
@@ -232,7 +239,7 @@ public class LanguageBean implements Serializable{
     }
     
     public void test() {
-        System.out.println("language bean test method");
+        System.out.println("language bean test method " + test);
     }
 
     public void testSave() {

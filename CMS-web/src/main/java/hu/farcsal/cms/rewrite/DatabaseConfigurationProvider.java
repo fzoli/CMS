@@ -15,10 +15,12 @@ import javax.servlet.ServletContext;
 import org.ocpsoft.rewrite.annotation.RewriteConfiguration;
 import org.ocpsoft.rewrite.config.Configuration;
 import org.ocpsoft.rewrite.config.ConfigurationBuilder;
+import org.ocpsoft.rewrite.config.ConfigurationRuleBuilder;
 import org.ocpsoft.rewrite.config.Invoke;
 import org.ocpsoft.rewrite.config.OperationBuilder;
 import org.ocpsoft.rewrite.config.Rule;
 import org.ocpsoft.rewrite.el.El;
+import org.ocpsoft.rewrite.faces.config.PhaseBinding;
 import org.ocpsoft.rewrite.faces.config.PhaseOperation;
 import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
 import org.ocpsoft.rewrite.servlet.config.rule.Join;
@@ -28,7 +30,6 @@ import org.slf4j.LoggerFactory;
 /**
  * TODO:
  * - parameter validator
- * - parameter bean variable
  * - page view path generated
  * @author zoli
  */
@@ -138,20 +139,22 @@ public class DatabaseConfigurationProvider extends HttpConfigurationProvider {
             InboundPageFilter pageFilter = new PageMappingFilter(mapping);
             ViewlessPageHandler viewlessHandler = viewless ? new ViewlessPageHandler(mapping) : DUMMY_VIEWLESS_PAGE_HANDLER;
             List<String> actions = mapping.getPage().getActions();
-            int paramCount = mapping.getPage().getParameters().size();
+            List<Page.Parameter> params = mapping.getPage().getParameters();
+            int paramCount = params.size();
             for (int paramLimit = !mapping.getPage().isParameterIncremented() ? 0 : paramCount; paramLimit >= 0; paramLimit--) {
                 String link = mapping.getPermalink(new RewritePageFormatter(mapping, paramLimit));
                 if (link == null) continue; // the path is broken or the language not matches; next...
                 String mappingId =  id + '.' + paramLimit;
-                createRule(cfg, cache, lngProcessor, pageFilter, viewlessHandler, mappingId + "-y", link + '/', view, actions);
-                createRule(cfg, cache, lngProcessor, pageFilter, viewlessHandler, mappingId + "-x", link, view, actions);
+                createRule(cfg, cache, lngProcessor, pageFilter, viewlessHandler, mappingId + "-y", link + '/', view, actions, params);
+                createRule(cfg, cache, lngProcessor, pageFilter, viewlessHandler, mappingId + "-x", link, view, actions, params);
             }
         }
         
     }
     
-    private static void createRule(final ConfigurationBuilder cfg, final PageMappingCache cache, final LanguageProcessor lngProcessor, InboundPageFilter pageFilter, ViewlessPageHandler viewlessHandler, final String id, final String link, final String view, final List<String> actions) {
+    private static void createRule(final ConfigurationBuilder cfg, final PageMappingCache cache, final LanguageProcessor lngProcessor, InboundPageFilter pageFilter, ViewlessPageHandler viewlessHandler, final String id, final String link, final String view, final List<String> actions, final List<Page.Parameter> params) {
         Rule rule = Join.path(link).to(view);
+        ConfigurationRuleBuilder builder = cfg.addRule(rule);
         OperationBuilder operation = viewlessHandler.and(lngProcessor);
         if (actions != null) {
             for (final String action : actions) {
@@ -163,7 +166,16 @@ public class DatabaseConfigurationProvider extends HttpConfigurationProvider {
                 );
             }
         }
-        cfg.addRule(rule).when(lngProcessor.and(pageFilter)).perform(operation);
+        
+        for (Page.Parameter param : params) {
+            String name = param.getName();
+            String var = param.getBeanVariable();
+            if (var != null && !var.isEmpty() && link.contains(name)) {
+                builder.where(name).bindsTo(PhaseBinding.to(El.property(var)).after(PhaseId.RESTORE_VIEW));
+            }
+        }
+        
+        builder.when(lngProcessor.and(pageFilter)).perform(operation);
         RewriteRuleCache.save(rule, cache);
         LOGGER.info("Mapping[{}]: {} -> {}", id, link, view);
     }

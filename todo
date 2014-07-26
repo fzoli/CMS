@@ -1,0 +1,59 @@
+bug:
+- page parameters lista indexei nem frissülnek
+- a PrettyFaces újratöltése után nem frissül jól a konfiguráció
+- a PrettyHomeServlet a nem JSF oldalakat is tiltja
+
+sebezhetőség:
+- az eredeti jsf oldalak ne legyenek elérhetőek
+- a nem pretty url-ek se legyenek elérhetőek + a generált kimenetben a nem pretty url-ek cserélődjenek le pretty url-re
+
+fejlesztés:
+- teljes oldal cache
+  minden munkamenethez tartozik egy cache manager (fix név + sesskey)
+  a cache élettartama 1 perc
+  a cache oldalanként resetelhető illetve teljesen üríthető
+  az összes manager törölhető egyszerre
+  fontos a szálkezeltség (ha eldől, hogy cachelés lesz, legyen is az, és csak a cache folyamatok lezárulása után lehessen törölni)
+  tárolás: csak validurl cachelhető, a teljes url a kulcs; legyen globális és session cache, ezen belül három szintes cache
+           - kicsi, de gyors (RAM)
+           - közepes méretű, közepes teljesítményű (linuxon tmpfs illetve SSD swap)
+           - nagy, de lassú (háttértár)
+           Ha bármelyik tiltva van, a soron következő veszi át a helyét. Ha mind tiltva van, nincs cache.
+           (Az EHCache támogat kétféle TTL-t is, ami ehhez pont jól jön.)
+  A POST illetve paraméterezett GET kérések nem cachelődnek.
+  A session cache GZip tömörítésű, ha a hozzá tartozó böngésző támogatja azt; a globális cache tömörítetlen.
+  A session megszűnése a session cache törlését eredményezi.
+  Illeszkedés: viewId és real request URL alapján
+  Sorrend: előbb session, aztán global.
+- servlet filter sorrend: gzip, cache, tidy
+- page parameter validator to source code
+- ha nincs alapértelmezett oldal, mert mondjuk 1 oldal sincs a rendszerben,
+  jó lenne egy alapértelmezett oldal, ami ezt jelzi és mutat linket a CMS oldalra
+- locale display language helyett adatbázisban használt érték (nagy betűvel kezdve)
+- default locale a létező properties fájlok alapján, ha a kért locale nem létezik
+  (ne kelljen default properties fájlt létrehozni)
+
+továbbfejlesztés:
+- áttérés PrettyFaces-ről Rewrite-ra
+  FONTOS: a nyelvi kódnak paraméternek kell lennie és a ViewHandler#getActionURL metódusnak GET paraméterként includeolnia kell
+  Rewrite átírása, hogy a nyelvi kódot törölje az OutboundRewrite esetén, de vegye figyelembe a paramétert és szűrje ki a nem megfelelő nyelvű találatokat
+- a siteba opcionális paraméter, hogy melyik bean metódus tér vissza boolean értékkel, ami megadja, hogy be van-e lépve az user;
+  ha nincs belépve, minden url-re a siteon a kezdőképernyő jön be (ami dinamikusan adja meg a nézetet attól függően, van-e user belépve)
+- az előzőhöz hasonlóan page-be egy opc. paraméter, melyik metódus adja meg, hogy elérhető-e az oldal (ha nem érhető el, 404 error és nincs listázva; öröklődjön!)
+- jsf oldalon nyelvválasztó, mely az adott oldal címére mutat az adott nyelvhez
+  (csak az adott oldalhoz tartozó nyelvek megjelenítése)
+- a shops tábla address és name oszlopa legyen nyelvfüggő
+  (a Shop származzon le a Site-ból és tartozzon hozzá a ShopMapping)
+- debug tag, ami csak fejlesztőknek jelenik meg; paraméterben átadható bármely objektum (toString() használva) vagy formázható string, első paraméter egy nem opcionális cimke
+  a debug tegek oldalanként gyűjtődnek össze és a végén íródnak ki servlet filterrel
+
+reminder tags:
+// missing (prettyfaces) features from rewrite
+// page forwarding rule from database (f.e. login required site)
+// GZip + Tidy HTML like omnifaces' servlet filter
+// full page cache
+// users, user permissions and groups (UserBean)
+// log architect
+// link external directory (f.e. images)
+// memory mount (linux) for cache (fstab)
+   tmpfs           /mnt/ramdisk  tmpfs  nodev,nosuid,noexec,nodiratime,size=3072M   0       0

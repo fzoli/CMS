@@ -59,7 +59,7 @@ public class Page extends Node<Page, PageMapping> {
     @Embeddable
     public static class Parameter implements Serializable {
         
-        @Column(name="name")
+        @Column(name="name", nullable = false)
         private String name;
         
         @Column(name="bean-variable")
