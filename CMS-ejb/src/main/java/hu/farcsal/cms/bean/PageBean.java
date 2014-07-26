@@ -26,8 +26,8 @@ import javax.persistence.criteria.Root;
  */
 @Stateless
 public class PageBean implements PageBeanLocal {
-    
-    @PersistenceContext(unitName = "Test-ejbPU")
+
+    @PersistenceContext(unitName = "hu.farcsal_CMS-ejb-PU")
     private EntityManager manager;
     
     @Override

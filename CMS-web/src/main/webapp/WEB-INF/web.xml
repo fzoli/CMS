@@ -34,10 +34,4 @@
         <exception-type>java.lang.RuntimeException</exception-type>
         <location>/faces/errorpages/bug.xhtml</location>
     </error-page>
-    <ejb-local-ref>
-        <ejb-ref-name>PageBean</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <local>hu.farcsal.cms.bean.PageBeanLocal</local>
-        <ejb-link>CMS-ejb-0.1.1-SNAPSHOT#PageBean</ejb-link>
-    </ejb-local-ref>
 </web-app>
