@@ -79,6 +79,20 @@ public class PageMapping extends NodeMapping<Page> {
         return link.startsWith("/") ? link : "/" + link;
     }
     
+    public String getPermalinkWithCtxPath(String url) throws Exception {
+        String link = getPermalink(url);
+        return getAppCtxPath() + (link.startsWith("/") ? "" : "/") + link + (link.endsWith("/") ? "" : "/");
+    }
+    
+    private static String getAppCtxPath() {
+        try {
+            return Helpers.getPageHelper().getAppCtxPath();
+        }
+        catch (Exception ex) {
+            return "";
+        }
+    }
+    
     public static class PageFormatter implements Strings.Formatter<Page> {
 
         protected final PageMapping mapping;
@@ -141,7 +155,7 @@ public class PageMapping extends NodeMapping<Page> {
         
         private String stripAppCtxFromUrl(String url) {
             try {
-                return Helpers.pageHelper.stripAppCtxFromUrl(url);
+                return Helpers.getPageHelper().stripAppCtxFromUrl(url);
             }
             catch (Exception ex) {
                 // do not strip if the helper has not been set yet (e.g. during deploy)

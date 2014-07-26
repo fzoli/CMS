@@ -1,6 +1,5 @@
 package hu.farcsal.cms;
 
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;

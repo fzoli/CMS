@@ -1,10 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <!-- Settings -->
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
         <!--<param-value>Production</param-value>-->
     </context-param>
+    <context-param>
+        <param-name>org.ocpsoft.rewrite.config.CONFIG_RELOADING</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>hu.farcsal.cms.rewrite.HOME_PAGE_REDIRECTING</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>hu.farcsal.cms.rewrite.DISABLE_CACHE</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <!-- Filters (do not change the order) -->
+    <!-- GZip filter -->
+    <filter>
+        <filter-name>GzipResponseFilter</filter-name>
+        <filter-class>org.omnifaces.filter.GzipResponseFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>GzipResponseFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <context-param>
+        <description>
+            The threshold size in bytes. Must be a number between 0 and 9999. Defaults to 500.
+        </description>
+        <param-name>threshold</param-name>
+        <param-value>0</param-value>
+    </context-param>
+    <context-param>
+        <description>
+            The mimetypes which needs to be compressed. Must be a commaseparated string. Defaults to the below values.
+        </description>
+        <param-name>mimetypes</param-name>
+        <param-value>
+            text/plain, text/html, text/xml, text/css, text/javascript, text/csv, text/rtf,
+            application/xml, application/xhtml+xml, application/javascript, application/json
+        </param-value>
+    </context-param>
+    <!-- Cache filter -->
+    <filter>
+        <filter-name>CacheFilter</filter-name>
+        <filter-class>hu.farcsal.cms.rewrite.filter.CacheFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CacheFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- CharacterEncoding filter -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.omnifaces.filter.CharacterEncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <context-param>
+        <description>
+            The character encoding which is to be used to parse the HTTP request body. Defaults to UTF-8.
+        </description>
+        <param-name>encoding</param-name>
+        <param-value>UTF-8</param-value>
+    </context-param>
+    <!-- URLSession filter -->
+    <filter>
+        <filter-name>URLSessionFilter</filter-name>
+        <filter-class>hu.farcsal.cms.rewrite.filter.URLSessionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>URLSessionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- JSF -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -14,14 +91,17 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+    <!-- Session config -->
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <!-- Homepage -->
     <welcome-file-list>
         <welcome-file>/</welcome-file>
     </welcome-file-list>
+    <!-- Errorpages -->
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/faces/errorpages/expired.xhtml</location>

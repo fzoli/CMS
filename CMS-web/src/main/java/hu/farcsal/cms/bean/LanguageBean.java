@@ -1,6 +1,5 @@
 package hu.farcsal.cms.bean;
 
-import hu.farcsal.cms.bean.PageBeanLocal;
 import hu.farcsal.cms.entity.Language;
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -250,11 +250,13 @@ public class Page extends Node<Page, PageMapping> {
     }
     
     public String getViewPath(boolean withDir) {
-        String root = withDir ? getFacesDir() : null;
+        String facesdir = getFacesDir();
+        String root = withDir ? facesdir : null;
         if (viewPath == null) return null;
         String view = viewPath.trim();
         if (view.isEmpty()) return null;
-        if (root != null && !view.startsWith("/")) return root + (root.endsWith("/") ? "" : "/") + view;
+        if (root == null && facesdir != null && view.startsWith(facesdir)) return view.substring(facesdir.length());
+        if (root != null && !view.startsWith("/")) return root + view;
         return view;
     }
     
@@ -264,16 +266,22 @@ public class Page extends Node<Page, PageMapping> {
     
     public String getRealViewPath(boolean withDir) {
         try {
-            return Helpers.pageHelper.getRealViewPath(this, withDir);
+            return Helpers.getPageHelper().getRealViewPath(this, withDir);
         }
         catch (Exception ex) {
             return getViewPath(withDir);
         }
     }
     
+    private static String facesDir;
     private String getFacesDir() {
+        if (facesDir != null) {
+            return facesDir;
+        }
         try {
-            return Helpers.pageHelper.getFacesDir();
+            String dir = Helpers.getPageHelper().getFacesDir();
+            if (dir != null) dir = dir + (dir.endsWith("/") ? "" : "/");
+            return facesDir = dir;
         }
         catch (Exception ex) {
             return null;

@@ -36,6 +36,14 @@
                 <configuration>
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <ejbModule>
+                            <groupId>hu.farcsal</groupId>
+                            <artifactId>CMS-ejb</artifactId>
+                            <!-- Filename is important when you lookup an EJB; for example: java:app/CMS-ejb/PageBean -->
+                            <bundleFileName>CMS-ejb.jar</bundleFileName>
+                        </ejbModule>
+                    </modules>
                 </configuration>
             </plugin>
         </plugins>

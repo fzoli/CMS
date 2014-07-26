@@ -1,6 +1,7 @@
 package hu.farcsal.cms;
 
 import hu.farcsal.cms.bean.PageBeanLocal;
+import hu.farcsal.cms.rewrite.ConfigurationCacheProvider;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -30,6 +31,7 @@ public class Tester extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ConfigurationCacheProvider.reset();
         pages.testPages();
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {

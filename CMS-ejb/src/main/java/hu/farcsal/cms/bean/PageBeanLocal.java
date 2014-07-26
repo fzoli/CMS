@@ -13,7 +13,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface PageBeanLocal {
-
+    
     public Page getPageTree();
     
     public List<Site> getSites();

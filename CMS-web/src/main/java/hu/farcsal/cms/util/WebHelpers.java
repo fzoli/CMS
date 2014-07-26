@@ -1,0 +1,20 @@
+package hu.farcsal.cms.util;
+
+import hu.farcsal.cms.entity.spec.Helpers;
+import hu.farcsal.cms.rewrite.PrettyPageHelper;
+import javax.servlet.ServletContext;
+
+/**
+ *
+ * @author zoli
+ */
+public class WebHelpers {
+    
+    public static PrettyPageHelper getPageHelper(ServletContext ctx) {
+        PrettyPageHelper helper = Helpers.getPageHelper(PrettyPageHelper.class);
+        if (helper != null) return helper;
+        if (ctx == null) return null;
+        return Helpers.initPageHelper(new PrettyPageHelper(ctx));
+    }
+    
+}
