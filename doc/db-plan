@@ -1,0 +1,29 @@
+fix-permissions:
+user-id; is-admin; add-permission; edit-permission
+
+permissions:
+id, name, description
+
+permission-group:
+id, name, description, is-inverse
+
+permission-groups:
+id, permission-id
+
+user-permissions:
+user-name; permission-id
+
+user-permission-groups:
+user-name; group-id
+
+page
+  + permission-group-id
+
+user:
+user-name, sha-password, password-hint
+
+personal-data:
+user-name, title, first-name, middle-name, last-name, sex
+
+user-addresses:
+user-name, post-code, country, street
