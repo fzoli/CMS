@@ -10,12 +10,16 @@ import hu.farcsal.cms.util.Pages;
 import hu.farcsal.cms.util.WebHelpers;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.event.PhaseId;
 import javax.servlet.ServletContext;
 import org.ocpsoft.rewrite.annotation.RewriteConfiguration;
 import org.ocpsoft.rewrite.config.Configuration;
 import org.ocpsoft.rewrite.config.ConfigurationBuilder;
+import org.ocpsoft.rewrite.config.Invoke;
 import org.ocpsoft.rewrite.config.OperationBuilder;
 import org.ocpsoft.rewrite.config.Rule;
+import org.ocpsoft.rewrite.el.El;
+import org.ocpsoft.rewrite.faces.config.PhaseOperation;
 import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
 import org.ocpsoft.rewrite.servlet.config.rule.Join;
 import org.slf4j.Logger;
@@ -23,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * TODO:
- * - page action
  * - parameter validator
  * - parameter bean variable
  * - page view path generated
@@ -150,18 +153,16 @@ public class DatabaseConfigurationProvider extends HttpConfigurationProvider {
     private static void createRule(final ConfigurationBuilder cfg, final PageMappingCache cache, final LanguageProcessor lngProcessor, InboundPageFilter pageFilter, ViewlessPageHandler viewlessHandler, final String id, final String link, final String view, final List<String> actions) {
         Rule rule = Join.path(link).to(view);
         OperationBuilder operation = viewlessHandler.and(lngProcessor);
-//        if (actions != null) {
-//            for (final String action : actions) {
-//                if (action == null || action.isEmpty()) continue;
-//                // java.lang.ClassNotFoundException: org.ocpsoft.common.spi.ServiceLocator
-//                // org.ocpsoft.rewrite.exception.RewriteException: No registered org.ocpsoft.rewrite.el.spi.ExpressionLanguageProvider could handle the Expression
-//                operation = operation.and(
-//                    PhaseOperation.enqueue(
-//                        Invoke.binding(El.retrievalMethod(action))
-//                    ).after(PhaseId.RESTORE_VIEW)
-//                );
-//            }
-//        }
+        if (actions != null) {
+            for (final String action : actions) {
+                if (action == null || action.isEmpty()) continue;
+                operation = operation.and(
+                    PhaseOperation.enqueue(
+                        Invoke.binding(El.retrievalMethod(action))
+                    ).after(PhaseId.RESTORE_VIEW)
+                );
+            }
+        }
         cfg.addRule(rule).when(lngProcessor.and(pageFilter)).perform(operation);
         RewriteRuleCache.save(rule, cache);
         LOGGER.info("Mapping[{}]: {} -> {}", id, link, view);
