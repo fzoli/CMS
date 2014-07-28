@@ -1,7 +1,7 @@
 package hu.farcsal.cms.rewrite;
 
 import com.sun.faces.application.view.MultiViewHandler;
-import hu.farcsal.cms.entity.Language;
+import hu.farcsal.cms.entity.spec.LanguageCode;
 import hu.farcsal.cms.util.Faces;
 import hu.farcsal.cms.util.Pages;
 import java.util.Locale;
@@ -25,9 +25,9 @@ public class RewriteViewHandler extends MultiViewHandler {
     public Locale calculateLocale(FacesContext context) {
         Locale locale = super.calculateLocale(context);
         String lngParam = context.getExternalContext().getRequestParameterMap().get(Pages.getLanguageParameter().getKey());
-        if (lngParam != null) return Language.getLocale(locale, lngParam);
+        if (lngParam != null) return LanguageCode.getLocale(locale, lngParam);
         RewriteRuleCache cache = RewriteRuleCache.findByUrl(Faces.getRealRequestURI(context, true));
-        return cache == null ? locale : Language.getLocale(locale, cache.getLanguageCode());
+        return cache == null ? locale : LanguageCode.getLocale(locale, cache.getLanguageCode());
     }
     
     @Override

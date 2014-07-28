@@ -1,6 +1,7 @@
 package hu.farcsal.cms.entity;
 
 import hu.farcsal.cms.entity.key.PrimaryStringObject;
+import hu.farcsal.cms.entity.spec.LanguageCode;
 import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -67,16 +68,15 @@ public class Language extends PrimaryStringObject<Language> {
     }
     
     public Locale getLocale() {
-        return getLocale(null);
+        return getLocale((Locale)null);
     }
     
     public Locale getLocale(Locale defLocale) {
-        return getLocale(defLocale, getCode());
+        return LanguageCode.getLocale(defLocale, getCode());
     }
     
-    public static Locale getLocale(Locale defLocale, String code) {
-        if (code == null) return defLocale;
-        return defLocale == null ? new Locale(code) : new Locale(code, defLocale.getCountry());
+    public LanguageCode getLanguageCode() {
+        return LanguageCode.getLanguageCode(getCode());
     }
     
 }
