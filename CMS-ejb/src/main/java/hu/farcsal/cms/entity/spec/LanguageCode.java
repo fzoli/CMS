@@ -209,10 +209,15 @@ public enum LanguageCode {
         return defLocale == null ? new Locale(code) : new Locale(code, defLocale.getCountry());
     }
     
+    public static LanguageCode getLanguageCode(Locale locale) {
+        return getLanguageCode(locale.getLanguage());
+    }
+    
     public static LanguageCode getLanguageCode(String code) {
         if (code != null) {
+            code = code.toUpperCase();
             for (LanguageCode lc : LanguageCode.values()) {
-                if (code.toUpperCase().equals(lc.name())) {
+                if (code.equals(lc.name())) {
                     return lc;
                 }
             }
