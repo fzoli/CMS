@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -9,7 +10,15 @@
 </ui:define>
 <ui:define name="content">
     <h:outputText value="#{homedict['hello']}" />!
-    <br />
+    <c:set scope="request" var="row" property="x" value="10" />
+    <c:choose>
+        <c:when test="#{row==10}">
+            <ui:include src="/WEB-INF/includes/test.xhtml" />
+        </c:when>
+        <c:otherwise>
+            <h:outputLabel value="Not ten!" />
+        </c:otherwise>
+    </c:choose>
     Generated on: 
     <h:outputText value="#{session.lastAccessedTime}">
         <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" type="date" />
