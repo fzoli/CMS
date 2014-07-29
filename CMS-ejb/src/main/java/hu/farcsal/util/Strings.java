@@ -30,6 +30,10 @@ public class Strings {
         return sb.toString();
     }
     
+    public static String insert(String val, String addition) {
+        return addition + ltrim(val, addition);
+    }
+    
     public static String ltrim(String val, String... rems) {
         if (val == null) return null;
         for (String rem : rems) {

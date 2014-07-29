@@ -10,16 +10,19 @@
 </ui:define>
 <ui:define name="content">
     <h:outputText value="#{homedict['hello']}" />!
-    <c:set scope="request" var="row" property="x" value="10" />
-    <c:choose>
-        <c:when test="#{row==10}">
-            <ui:include src="/WEB-INF/includes/test.xhtml" />
-        </c:when>
-        <c:otherwise>
-            <h:outputLabel value="Not ten!" />
-        </c:otherwise>
-    </c:choose>
-    Generated on: 
+    <c:forEach items="#{includes.testIncludes}" var="inc" varStatus="loop">
+        <c:choose>
+            <c:when test="#{inc.JSF}">
+                <f:subview id="#{inc.class.simpleName}_ind_#{loop.index}">
+                    <ui:include src="#{inc.getSource(facesContext.viewRoot.locale)}" />
+                </f:subview>
+            </c:when>
+            <c:otherwise>
+                <h:outputText value="#{inc.getSource(facesContext.viewRoot.locale)}" escape="false" />
+            </c:otherwise>
+        </c:choose>
+    </c:forEach>
+    <p>Generated on:</p>
     <h:outputText value="#{session.lastAccessedTime}">
         <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" type="date" />
     </h:outputText>

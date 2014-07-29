@@ -7,26 +7,26 @@ import java.util.Locale;
  *
  * @author zoli
  */
-public class TestInclude implements Include {
-
-    @Override
-    public boolean isPageInclude() {
-        return false;
-    }
+public class TestSrcInclude implements Include {
     
     @Override
     public String getSource(Locale locale) {
-        return "<p>Test include</p>";
+        return "<h2>Include source</h2>";
     }
     
     @Override
     public String getDescription(Locale locale) {
         switch (LanguageCode.getLanguageCode(locale)) {
             case HU:
-                return "Teszt include";
+                return "Teszt Java include";
             default:
-                return "Test include";
+                return "Test Java include";
         }
+    }
+
+    @Override
+    public boolean isJSF() {
+        return false;
     }
     
 }

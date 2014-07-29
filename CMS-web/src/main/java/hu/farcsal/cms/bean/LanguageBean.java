@@ -134,7 +134,7 @@ public class LanguageBean implements Serializable{
             String lng;
             switch (hintIndex) {
                 case 0:
-                    lng = hint.name();
+                    lng = hint.name().toLowerCase();
                     break;
                 case 1:
                     lng = hint.NATIVE_NAME;

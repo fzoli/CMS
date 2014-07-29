@@ -8,10 +8,10 @@ import java.util.Locale;
  */
 public interface Include {
     
+    public boolean isJSF();
+    
     public String getSource(Locale locale);
     
     public String getDescription(Locale locale);
-    
-    public boolean isPageInclude();
     
 }
