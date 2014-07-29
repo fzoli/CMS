@@ -1,0 +1,3 @@
+Manual install:
+
+mvn install:install-file -DgroupId=com.ethlo.persistence.tools -DartifactId=eclipselink-maven-plugin -Dversion=1.1-SNAPSHOT -Dpackaging=maven-plugin -Dfile=eclipselink-maven-plugin-1.1-20140409.082812-4.jar

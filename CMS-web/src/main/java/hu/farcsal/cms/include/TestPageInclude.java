@@ -31,4 +31,9 @@ public class TestPageInclude implements Include {
         return true;
     }
     
+    @Override
+    public String getImageBase64() {
+        return null;
+    }
+    
 }

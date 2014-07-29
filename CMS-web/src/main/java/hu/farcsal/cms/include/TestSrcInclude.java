@@ -28,5 +28,10 @@ public class TestSrcInclude implements Include {
     public boolean isJSF() {
         return false;
     }
+
+    @Override
+    public String getImageBase64() {
+        return null;
+    }
     
 }

@@ -14,4 +14,6 @@ public interface Include {
     
     public String getDescription(Locale locale);
     
+    public String getImageBase64();
+    
 }
