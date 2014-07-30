@@ -6,7 +6,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <c:choose>
         <c:when test="#{inc.JSF}">
-            <f:subview id="#{inc.class.simpleName}_ind_#{loop.index}">
+            <f:subview id="#{inc.class.simpleName}_ind_#{index}">
                 <ui:include src="#{inc.getSource(facesContext.viewRoot.locale)}" />
             </f:subview>
         </c:when>
