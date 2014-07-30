@@ -48,6 +48,7 @@ public class IncludeBean implements Comparator<Include> {
         for (String name : getTestIncludeNames()) {
             s.add(create(name));
         }
+        Collections.sort(s, this);
         return s;
     }
     
