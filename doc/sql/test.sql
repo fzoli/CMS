@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Hoszt: localhost
--- Létrehozás ideje: 2014. júl. 06. 13:49
+-- Létrehozás ideje: 2014. júl. 31. 23:41
 -- Szerver verzió: 5.5.37
 -- PHP verzió: 5.4.4-14+deb7u10
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `nodes` (
   `parent-id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_nodes_parent-id` (`parent-id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- A tábla adatainak kiíratása `nodes`
@@ -104,7 +104,8 @@ INSERT INTO `nodes` (`id`, `type`, `disabled`, `priority`, `parent-id`) VALUES
 (4, 'site', 0, 0, NULL),
 (5, 'page', 0, 0, NULL),
 (6, 'page', 0, 0, NULL),
-(7, 'page', 0, 0, 6);
+(7, 'page', 0, 0, 6),
+(8, 'page', 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -127,6 +128,47 @@ CREATE TABLE IF NOT EXISTS `page-filters` (
 INSERT INTO `page-filters` (`single`, `page-id`, `site-id`) VALUES
 (1, 1, 4),
 (0, 2, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet: `page-layout-column-widgets`
+--
+
+CREATE TABLE IF NOT EXISTS `page-layout-column-widgets` (
+  `column-id` bigint(20) NOT NULL,
+  `widget` varchar(255) NOT NULL,
+  `index` int(11) NOT NULL,
+  KEY `FK_page-layout-column-widgets_column-id` (`column-id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet: `page-layout-columns`
+--
+
+CREATE TABLE IF NOT EXISTS `page-layout-columns` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `content-index` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet: `page-layouts`
+--
+
+CREATE TABLE IF NOT EXISTS `page-layouts` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `type` varchar(255) NOT NULL,
+  `left-column` bigint(20) DEFAULT NULL,
+  `right-column` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_page-layouts_right-column` (`right-column`),
+  KEY `FK_page-layouts_left-column` (`left-column`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -157,7 +199,8 @@ INSERT INTO `page-mappings` (`name`, `pretty-name`, `node-id`, `language-code`) 
 ('empty', NULL, 6, 'en'),
 ('üres', NULL, 6, 'hu'),
 ('content', NULL, 7, 'en'),
-('tartalom', NULL, 7, 'hu');
+('tartalom', NULL, 7, 'hu'),
+('nincsen', NULL, 8, 'hu');
 
 -- --------------------------------------------------------
 
@@ -167,7 +210,7 @@ INSERT INTO `page-mappings` (`name`, `pretty-name`, `node-id`, `language-code`) 
 
 CREATE TABLE IF NOT EXISTS `page-params` (
   `page-id` bigint(20) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
   `bean-variable` varchar(255) DEFAULT NULL,
   `validator` varchar(255) DEFAULT NULL,
   `index` int(11) NOT NULL,
@@ -180,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `page-params` (
 
 INSERT INTO `page-params` (`page-id`, `name`, `bean-variable`, `validator`, `index`) VALUES
 (1, 'value1', NULL, 'testValidator', 0),
-(1, 'value2', NULL, NULL, 1);
+(1, 'value2', 'language.test', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -196,6 +239,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `action-inherited` tinyint(1) NOT NULL DEFAULT '0',
   `parameter-incremented` tinyint(1) NOT NULL DEFAULT '0',
   `site-dependent` tinyint(1) NOT NULL DEFAULT '0',
+  `layout` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -203,12 +247,13 @@ CREATE TABLE IF NOT EXISTS `pages` (
 -- A tábla adatainak kiíratása `pages`
 --
 
-INSERT INTO `pages` (`id`, `view-path`, `action`, `view-path-generated`, `action-inherited`, `parameter-incremented`, `site-dependent`) VALUES
-(1, '/faces/home.xhtml', 'language.test', 0, 0, 1, 0),
-(2, 'test.xhtml', NULL, 0, 0, 0, 0),
-(5, 'index.xhtml', NULL, 0, 0, 0, 0),
-(6, '/no-faces/blabla.xhtml', NULL, 0, 0, 0, 0),
-(7, 'sample.xhtml', NULL, 0, 0, 0, 0);
+INSERT INTO `pages` (`id`, `view-path`, `action`, `view-path-generated`, `action-inherited`, `parameter-incremented`, `site-dependent`, `layout`) VALUES
+(1, '/faces/home.xhtml', 'language.test', 0, 0, 1, 0, NULL),
+(2, 'test.xhtml', NULL, 0, 0, 0, 0, NULL),
+(5, 'index.xhtml', NULL, 0, 0, 0, 0, NULL),
+(6, NULL, NULL, 0, 0, 0, 0, NULL),
+(7, 'sample.xhtml', NULL, 0, 0, 0, 0, NULL),
+(8, '/no-faces/salala.xhtml', NULL, 0, 0, 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -297,6 +342,19 @@ ALTER TABLE `nodes`
 ALTER TABLE `page-filters`
   ADD CONSTRAINT `FK_page-filters_page-id` FOREIGN KEY (`page-id`) REFERENCES `pages` (`id`),
   ADD CONSTRAINT `FK_page-filters_site-id` FOREIGN KEY (`site-id`) REFERENCES `sites` (`id`);
+
+--
+-- Megkötések a táblához `page-layout-column-widgets`
+--
+ALTER TABLE `page-layout-column-widgets`
+  ADD CONSTRAINT `FK_page-layout-column-widgets_column-id` FOREIGN KEY (`column-id`) REFERENCES `page-layout-columns` (`id`);
+
+--
+-- Megkötések a táblához `page-layouts`
+--
+ALTER TABLE `page-layouts`
+  ADD CONSTRAINT `FK_page-layouts_left-column` FOREIGN KEY (`left-column`) REFERENCES `page-layout-columns` (`id`),
+  ADD CONSTRAINT `FK_page-layouts_right-column` FOREIGN KEY (`right-column`) REFERENCES `page-layout-columns` (`id`);
 
 --
 -- Megkötések a táblához `page-mappings`
