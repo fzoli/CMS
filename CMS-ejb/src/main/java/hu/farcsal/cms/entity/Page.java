@@ -13,6 +13,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
@@ -37,6 +38,10 @@ public class Page extends Node<Page, PageMapping> {
     
     @OneToMany(mappedBy = "page")
     private List<PageFilter> pageFilters = new ArrayList<>();
+    
+    @ManyToOne
+    @JoinColumn(name="layout", nullable=true)
+    private PageLayout layout;
     
     @Column(name="view-path", nullable=true)
     private String viewPath;
@@ -207,6 +212,14 @@ public class Page extends Node<Page, PageMapping> {
     
     public void setSiteDependent(boolean siteDependent) {
         this.siteDependent = siteDependent;
+    }
+
+    public PageLayout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(PageLayout layout) {
+        this.layout = layout;
     }
     
     public String getAction() {
