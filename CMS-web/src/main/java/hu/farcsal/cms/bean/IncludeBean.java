@@ -1,6 +1,8 @@
-package hu.farcsal.cms.include;
+package hu.farcsal.cms.bean;
 
 import hu.farcsal.cms.entity.PageLayout;
+import hu.farcsal.cms.include.Include;
+import hu.farcsal.cms.include.Includes;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
