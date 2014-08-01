@@ -64,8 +64,14 @@ public class Includes {
         return includes;
     }
     
+    public static PageLayout.Type getCurrentType() {
+        PageLayout layout = getLayout();
+        if (layout == null || layout.getType() == null) return PageLayout.Type.NO_COLUMNS;
+        return layout.getType();
+    }
+    
     public static int getCurrentContentIndex(boolean leftColumn) {
-        PageLayout layout = getLayout(Faces.getRealRequestURI(FacesContext.getCurrentInstance(), true));
+        PageLayout layout = getLayout();
         if (layout == null) return 0;
         PageLayoutColumn c = leftColumn ? layout.getLeftColumn() : layout.getRightColumn();
         if (c == null) return 0;
@@ -89,6 +95,10 @@ public class Includes {
             if (name != null && !name.isEmpty()) widgets.add(create(name));
         }
         return widgets;
+    }
+    
+    private static PageLayout getLayout() {
+        return getLayout(Faces.getRealRequestURI(FacesContext.getCurrentInstance(), true));
     }
     
     private static PageLayout getLayout(String address) {

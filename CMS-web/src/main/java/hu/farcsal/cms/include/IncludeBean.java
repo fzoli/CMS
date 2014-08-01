@@ -1,5 +1,6 @@
 package hu.farcsal.cms.include;
 
+import hu.farcsal.cms.entity.PageLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
@@ -35,6 +36,10 @@ public class IncludeBean {
     
     public List<Include> getAvailableIncludes() {
         return Includes.getAvailableIncludes();
+    }
+    
+    public PageLayout.Type getCurrentType() {
+        return Includes.getCurrentType();
     }
     
     public int getCurrentContentIndex(boolean leftColumn) {
