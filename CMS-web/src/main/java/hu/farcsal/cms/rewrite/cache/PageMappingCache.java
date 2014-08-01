@@ -1,5 +1,6 @@
 package hu.farcsal.cms.rewrite.cache;
 
+import hu.farcsal.cms.entity.Page;
 import hu.farcsal.cms.entity.PageMapping;
 import hu.farcsal.cms.rewrite.RewriteRuleCache;
 
@@ -42,6 +43,17 @@ public class PageMappingCache extends RewriteRuleCache {
             default:
                 return false;
         }
+    }
+    
+    public static PageMapping getPageMapping(String address) {
+        PageMappingCache c = PageMappingCache.findByUrl(PageMappingCache.class, address);
+        if (c == null || c.getPageMapping() == null) return null;
+        return c.getPageMapping();
+    }
+    
+    public static Page getPage(String address) {
+        PageMapping pm = getPageMapping(address);
+        return pm == null ? null : pm.getPage();
     }
     
 }
