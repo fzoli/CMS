@@ -20,10 +20,22 @@ page
   + permission-group-id
 
 user:
-user-name, sha-password, password-hint
+user-name, sha-password, password-hint, is-company, e-mail
 
 personal-data:
-user-name, title, first-name, middle-name, last-name, sex
+user-name, title, first-name, middle-name, last-name, sex, tax-number
 
 user-addresses:
-user-name, post-code, country, street
+user-name, street-id, house-number
+
+loc-countries:
+[code], language-code, english-name, native-name
+
+loc-regions:
+id, country-code, name
+
+loc-cities:
+id, region-id, post-code, name
+
+loc-streets:
+id, city-id, name
