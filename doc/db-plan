@@ -5,7 +5,7 @@ boolean allPermission, protected, debug
 ---
 
 fix-permissions:
-user-id; rank, add-permission; edit-permission
+user-id, rank, add-permission, edit-permission
 
 permissions:
 id, name, description
@@ -17,16 +17,19 @@ permission-groups:
 group-id, permission-id
 
 user-permissions:
-user-name; permission-id
+user-name, permission-id
 
 user-permission-groups:
-user-name; group-id
+user-name, group-id
 
 pages
   + permission-group-id
 
+activation-codes:
+code, user-name
+
 users:
-user-name, sha-password, password-hint, is-company, e-mail
+user-name, sha-password, password-hint, is-company, e-mail, registration-date, last-sign-in
 
 user-datas:
 id, user-name, type, phone
