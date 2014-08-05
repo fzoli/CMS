@@ -1,5 +1,11 @@
+rank enum properties:
+String nameKey
+boolean allPermission, protected, debug
+
+---
+
 fix-permissions:
-user-id; is-admin; add-permission; edit-permission
+user-id; rank, add-permission; edit-permission
 
 permissions:
 id, name, description
@@ -8,7 +14,7 @@ permission-group:
 id, name, description, is-inverse
 
 permission-groups:
-id, permission-id
+group-id, permission-id
 
 user-permissions:
 user-name; permission-id
@@ -16,17 +22,23 @@ user-name; permission-id
 user-permission-groups:
 user-name; group-id
 
-page
+pages
   + permission-group-id
 
-user:
+users:
 user-name, sha-password, password-hint, is-company, e-mail
 
-personal-data:
-user-name, title, first-name, middle-name, last-name, sex, tax-number
+user-datas:
+id, user-name, type, phone
 
-user-addresses:
-user-name, street-id, house-number
+personal-datas:
+id, title, first-name, middle-name, last-name, sex, year-of-birth
+
+company-datas:
+id, company-name, tax-number
+
+user-data-addresses:
+id, street-id, house-number
 
 loc-countries:
 [code], language-code, english-name, native-name
@@ -39,3 +51,6 @@ id, region-id, post-code, name
 
 loc-streets:
 id, city-id, name
+
+languages
+  + english-name-order
