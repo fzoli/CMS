@@ -1,11 +1,18 @@
-rank enum properties:
-String nameKey
-boolean allPermission, protected, debug
+Rank enum:
+
+String localizationKey
+boolean allPermission, protected
+
+- The enumeration ordering gives the hierarchy (the first one has the biggest rank).
+- If a permission gives the right to modify an other user, you can use the permission only if the other user's rank is smaller than yours.
+- If protected is true, the users's rank and permissions can not be modified (and the user is not visible in the permission editor)
+- If allPermission is true, the user can use both fix permissions and database stored permissions too.
+- There might be helper functions, for example: isDeveloper, isDebug
 
 ---
 
 fix-permissions:
-user-id, rank, add-permission, edit-permission
+user-id, rank, add-permission, edit-permission, write-article
 
 permissions:
 id, name, description
