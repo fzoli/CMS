@@ -11,10 +11,7 @@ import javax.servlet.ServletContext;
 public class WebHelpers {
     
     public static PrettyPageHelper getPageHelper(ServletContext ctx) {
-        PrettyPageHelper helper = Helpers.getPageHelper(PrettyPageHelper.class);
-        if (helper != null) return helper;
-        if (ctx == null) return null;
-        return Helpers.initPageHelper(new PrettyPageHelper(ctx));
+        return Helpers.initHelper(PrettyPageHelper.initializer(ctx));
     }
     
 }

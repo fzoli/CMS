@@ -1,8 +1,10 @@
 package hu.farcsal.cms.rewrite;
 
-import hu.farcsal.util.Servlets;
 import hu.farcsal.cms.entity.Page;
+import hu.farcsal.cms.entity.spec.HelperMap.AutoInitializer;
 import hu.farcsal.cms.entity.spec.Helpers;
+import hu.farcsal.cms.entity.spec.Helpers.PageHelper;
+import hu.farcsal.util.Servlets;
 import hu.farcsal.util.Strings;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -61,4 +63,26 @@ public class PrettyPageHelper implements Helpers.PageHelper {
         return Strings.ltrim(path, getFacesDir(), "/");
     }
 
+    public static AutoInitializer<PageHelper, PrettyPageHelper> initializer(final ServletContext sc) {
+        return new AutoInitializer<PageHelper, PrettyPageHelper>() {
+
+            @Override
+            public PrettyPageHelper init() {
+                if (sc == null) return null;
+                return new PrettyPageHelper(sc);
+            }
+
+            @Override
+            public Class<PrettyPageHelper> type() {
+                return PrettyPageHelper.class;
+            }
+            
+            @Override
+            public Class<PageHelper> key() {
+                return PageHelper.class;
+            }
+            
+        };
+    }
+    
 }
