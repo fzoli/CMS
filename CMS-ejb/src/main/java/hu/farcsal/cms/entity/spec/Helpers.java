@@ -1,6 +1,7 @@
 package hu.farcsal.cms.entity.spec;
 
-import hu.farcsal.util.VariableMap;
+import hu.farcsal.util.ObjectMap;
+import hu.farcsal.util.Initializers;
 import hu.farcsal.cms.entity.Page;
 
 /**
@@ -9,7 +10,7 @@ import hu.farcsal.cms.entity.Page;
  */
 public class Helpers {
     
-    private static final VariableMap HELPERS = new VariableMap(
+    private static final ObjectMap HELPERS = new ObjectMap(
         PageHelper.class
     );
     
@@ -24,7 +25,7 @@ public class Helpers {
         public Rank getRank(String name);
     }
     
-    public static <K, T extends K> T initHelper(VariableMap.AutoInitializer<K, T> helper) {
+    public static <K, T extends K> T initHelper(Initializers.ObjectInitializer<K, T> helper) {
         return HELPERS.initVariable(helper);
     }
     

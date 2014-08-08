@@ -1,7 +1,7 @@
 package hu.farcsal.cms.util;
 
 import hu.farcsal.cms.entity.Page;
-import hu.farcsal.util.VariableMap.AutoInitializer;
+import hu.farcsal.util.Initializers.ObjectInitializer;
 import hu.farcsal.cms.entity.spec.Helpers;
 import hu.farcsal.cms.entity.spec.Helpers.PageHelper;
 import hu.farcsal.util.Servlets;
@@ -63,8 +63,8 @@ public class WebPageHelper implements Helpers.PageHelper {
         return Strings.ltrim(path, getFacesDir(), "/");
     }
 
-    public static AutoInitializer<PageHelper, WebPageHelper> initializer(final ServletContext sc) {
-        return new AutoInitializer<PageHelper, WebPageHelper>() {
+    public static ObjectInitializer<PageHelper, WebPageHelper> initializer(final ServletContext sc) {
+        return new ObjectInitializer<PageHelper, WebPageHelper>() {
 
             @Override
             public WebPageHelper initialize() {
