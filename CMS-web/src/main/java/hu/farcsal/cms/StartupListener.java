@@ -1,7 +1,7 @@
 package hu.farcsal.cms;
 
 import hu.farcsal.cms.entity.spec.Helpers;
-import hu.farcsal.cms.rewrite.PrettyPageHelper;
+import hu.farcsal.cms.util.WebPageHelper;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -15,7 +15,7 @@ public class StartupListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        Helpers.initHelper(PrettyPageHelper.initializer(sce.getServletContext()));
+        Helpers.initHelper(WebPageHelper.initializer(sce.getServletContext()));
     }
 
     @Override

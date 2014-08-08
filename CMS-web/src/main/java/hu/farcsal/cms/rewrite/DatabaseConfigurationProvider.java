@@ -1,5 +1,6 @@
 package hu.farcsal.cms.rewrite;
 
+import hu.farcsal.cms.util.WebPageHelper;
 import hu.farcsal.cms.bean.CachedBeans;
 import hu.farcsal.cms.bean.PageBeanLocal;
 import hu.farcsal.cms.entity.Language;
@@ -75,7 +76,7 @@ public class DatabaseConfigurationProvider extends HttpConfigurationProvider {
     
     private static final ViewlessPageHandler DUMMY_VIEWLESS_PAGE_HANDLER = new ViewlessPageHandler(null);
     
-    private static PrettyPageHelper pageHelper;
+    private static WebPageHelper pageHelper;
     private static PageBeanLocal pageBean;
     
     private static void initProvider(ServletContext context) {

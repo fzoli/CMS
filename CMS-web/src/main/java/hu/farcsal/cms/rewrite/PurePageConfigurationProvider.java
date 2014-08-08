@@ -1,5 +1,6 @@
 package hu.farcsal.cms.rewrite;
 
+import hu.farcsal.cms.util.WebPageHelper;
 import hu.farcsal.cms.util.Pages;
 import hu.farcsal.cms.util.WebHelpers;
 import hu.farcsal.util.Servlets;
@@ -43,7 +44,7 @@ public class PurePageConfigurationProvider extends HttpConfigurationProvider {
         private final Pattern PATTERN;
         private final List<String> ERROR_PAGES;
         
-        public PurePagePatternCondition(PrettyPageHelper helper, List<String> errorPages) {
+        public PurePagePatternCondition(WebPageHelper helper, List<String> errorPages) {
             //  [1             ] [2        ] [3 [4     ]   [5 [6                  ]  ] ]
             // ^(https?://[^/]+)?(/Test-war) (  (/faces)?/?(  (.+\.xhtml|resources).*)?)$
             PATTERN = Pattern.compile(String.format("^(https?://[^/]+)?(%s)((%s)?/?((.+\\.xhtml%s).*)?)$", helper.getAppCtxPath(), helper.getFacesDir(), blackPattern()), Pattern.CASE_INSENSITIVE);
@@ -97,7 +98,7 @@ public class PurePageConfigurationProvider extends HttpConfigurationProvider {
     @Override
     public Configuration getConfiguration(ServletContext t) {
         List<String> errorPages = Servlets.getErrorPages(t);
-        PrettyPageHelper helper = WebHelpers.getPageHelper(t);
+        WebPageHelper helper = WebHelpers.getPageHelper(t);
         return ConfigurationBuilder.begin().addRule()
                 .when(Direction.isInbound().and(new PurePagePatternCondition(helper, errorPages)))
                 .perform(Redirect.temporary(helper.getAppCtxPath() + "/"));

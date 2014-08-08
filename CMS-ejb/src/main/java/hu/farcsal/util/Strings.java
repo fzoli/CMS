@@ -1,6 +1,7 @@
 package hu.farcsal.util;
 
 import java.text.Normalizer;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,6 +12,19 @@ public class Strings {
     
     public static interface Formatter<T> {
         public String toString(T obj);
+    }
+    
+    public static class ClassFormatter implements Formatter<Class<?>> {
+
+        @Override
+        public String toString(Class<?> obj) {
+            return obj.getSimpleName();
+        }
+        
+    }
+    
+    public static <T> String join(T[] list, String delim, Formatter<T> getter) {
+        return join(Arrays.asList(list), delim, getter);
     }
     
     public static <T> String join(List<T> list, String delim, Formatter<T> getter) {

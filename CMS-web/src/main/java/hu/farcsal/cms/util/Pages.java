@@ -6,7 +6,6 @@ import hu.farcsal.cms.entity.Page;
 import hu.farcsal.cms.entity.PageFilter;
 import hu.farcsal.cms.entity.PageMapping;
 import hu.farcsal.cms.entity.Site;
-import hu.farcsal.cms.rewrite.PrettyPageHelper;
 import hu.farcsal.util.UrlParameters;
 import java.io.File;
 import java.util.List;
@@ -111,7 +110,7 @@ public class Pages {
     }
     
     public static String stripAppContext(String url) {
-        PrettyPageHelper helper = WebHelpers.getPageHelper(null);
+        WebPageHelper helper = WebHelpers.getPageHelper(null);
         if (helper == null) return url;
         return helper.stripAppCtxFromUrl(url);
     }

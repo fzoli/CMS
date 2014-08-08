@@ -1,7 +1,7 @@
-package hu.farcsal.cms.rewrite;
+package hu.farcsal.cms.util;
 
 import hu.farcsal.cms.entity.Page;
-import hu.farcsal.cms.entity.spec.HelperMap.AutoInitializer;
+import hu.farcsal.util.VariableMap.AutoInitializer;
 import hu.farcsal.cms.entity.spec.Helpers;
 import hu.farcsal.cms.entity.spec.Helpers.PageHelper;
 import hu.farcsal.util.Servlets;
@@ -17,13 +17,13 @@ import javax.servlet.ServletContext;
  *
  * @author zoli
  */
-public class PrettyPageHelper implements Helpers.PageHelper {
+public class WebPageHelper implements Helpers.PageHelper {
 
     private final ServletContext SC;
 
     private String facesDir;
 
-    public PrettyPageHelper(ServletContext sc) {
+    public WebPageHelper(ServletContext sc) {
         SC = sc;
     }
 
@@ -63,22 +63,22 @@ public class PrettyPageHelper implements Helpers.PageHelper {
         return Strings.ltrim(path, getFacesDir(), "/");
     }
 
-    public static AutoInitializer<PageHelper, PrettyPageHelper> initializer(final ServletContext sc) {
-        return new AutoInitializer<PageHelper, PrettyPageHelper>() {
+    public static AutoInitializer<PageHelper, WebPageHelper> initializer(final ServletContext sc) {
+        return new AutoInitializer<PageHelper, WebPageHelper>() {
 
             @Override
-            public PrettyPageHelper init() {
+            public WebPageHelper initialize() {
                 if (sc == null) return null;
-                return new PrettyPageHelper(sc);
+                return new WebPageHelper(sc);
             }
 
             @Override
-            public Class<PrettyPageHelper> type() {
-                return PrettyPageHelper.class;
+            public Class<WebPageHelper> getType() {
+                return WebPageHelper.class;
             }
             
             @Override
-            public Class<PageHelper> key() {
+            public Class<PageHelper> getKey() {
                 return PageHelper.class;
             }
             
