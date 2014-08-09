@@ -21,27 +21,27 @@ public abstract class KeyBasedMap<K, V> implements Map<K, V> {
     private static abstract class BaseCollection<K, V, O> implements Collection<O> {
 
         protected final KeyBasedMap<K, V> M;
-        protected final ArrayList<K> S;
+        protected final ArrayList<K> L;
         
         public BaseCollection(KeyBasedMap<K, V> map) {
             M = map;
-            S = new ArrayList<>(map.safeKeySet());
+            L = new ArrayList<>(map.safeKeySet());
         }
         
         @Override
         public void clear() {
-            M.clear(S);
-            S.clear();
+            M.clear(L);
+            L.clear();
         }
         
         @Override
         public int size() {
-            return S.size();
+            return L.size();
         }
 
         @Override
         public boolean isEmpty() {
-            return S.isEmpty();
+            return L.isEmpty();
         }
 
         @Override
@@ -72,7 +72,7 @@ public abstract class KeyBasedMap<K, V> implements Map<K, V> {
         public boolean remove(Object o) {
             Object key = findKey(o);
             if (key == null) return false;
-            S.remove(key);
+            L.remove(key);
             return M.remove(key) != null;
         }
 
@@ -102,13 +102,39 @@ public abstract class KeyBasedMap<K, V> implements Map<K, V> {
     
     protected static class KeySet<K, V> extends BaseCollection<K, V, K> implements Set<K> {
 
+        protected class KeyIterator implements Iterator<K> {
+
+            private final Iterator<K> IT = L.iterator();
+
+            private K key;
+            
+            @Override
+            public boolean hasNext() {
+                return IT.hasNext();
+            }
+
+            @Override
+            public K next() {
+                return key = IT.next();
+            }
+
+            @Override
+            public void remove() {
+                if (key != null) {
+                    IT.remove();
+                    M.remove(key);
+                }
+            }
+            
+        }
+        
         public KeySet(KeyBasedMap<K, V> map) {
             super(map);
         }
 
         @Override
         public Iterator<K> iterator() {
-            return S.iterator();
+            return new KeyIterator();
         }
 
         @Override
@@ -131,11 +157,11 @@ public abstract class KeyBasedMap<K, V> implements Map<K, V> {
             public boolean hasNext() {
                 if (hasNext != null) return hasNext;
                 synchronized (M.LOCK) {
-                    int size = M.size();
+                    int size = L.size();
                     int nextIndex = index + 1;
                     hasNext = size > 0 && nextIndex < size;
                     if (hasNext) {
-                        key = S.get(nextIndex);
+                        key = L.get(nextIndex);
                         obj = M.get(key);
                     }
                 }
@@ -156,6 +182,14 @@ public abstract class KeyBasedMap<K, V> implements Map<K, V> {
             
             protected V val() {
                 return obj;
+            }
+
+            @Override
+            public void remove() {
+                if (key != null) {
+                    L.remove(key);
+                    M.remove(key);
+                }
             }
             
         }
@@ -194,6 +228,11 @@ public abstract class KeyBasedMap<K, V> implements Map<K, V> {
             
             public EntryIterator() {
                 IT = VALS.iterator();
+            }
+
+            @Override
+            public void remove() {
+                IT.remove();
             }
             
             @Override
@@ -360,7 +399,7 @@ public abstract class KeyBasedMap<K, V> implements Map<K, V> {
 
     @Override
     public void clear() {
-        clear(keySet());
+        clear(loadKeySet());
     }
 
     private void clear(Collection<K> keys) {
