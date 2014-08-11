@@ -78,17 +78,6 @@ public class KeyCacheMap<V extends Serializable> extends KeyBasedMap<String, V> 
     @Override
     protected Set<String> loadKeySet() {
         final ArrayCollection<String> ac = new ArrayCollection<>();
-//        File[] files = DIR.listFiles(new FileFilter() {
-//
-//            @Override
-//            public boolean accept(File pathname) {
-//                return pathname.isFile();
-//            }
-//            
-//        });
-//        for (File f : files) {
-//            ac.add(createKey(f));
-//        }
         DIR.listFiles(new FileFilter() {
 
             @Override
@@ -102,10 +91,6 @@ public class KeyCacheMap<V extends Serializable> extends KeyBasedMap<String, V> 
         });
         return ac;
     }
-
-    private String createKey(File f) {
-        return f.getName();
-    }
     
     @Override
     public V get(Object key) {
@@ -114,8 +99,8 @@ public class KeyCacheMap<V extends Serializable> extends KeyBasedMap<String, V> 
 
     @Override
     public V put(String key, V value) {
-        String k = toKey(key);
-        File f = new File(DIR, k);
+        File f = toFile(key);
+        if (f == null) return null;
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f, false));
             out.writeObject(value);
@@ -133,9 +118,8 @@ public class KeyCacheMap<V extends Serializable> extends KeyBasedMap<String, V> 
     }
 
     private V load(Object key, boolean delete) {
-        String k = toKey(key);
-        File f = new File(DIR, k);
-        if (!f.isFile()) return null;
+        File f = toFile(key);
+        if (f == null || !f.isFile()) return null;
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
             Object o = in.readObject();
@@ -148,6 +132,16 @@ public class KeyCacheMap<V extends Serializable> extends KeyBasedMap<String, V> 
         catch (Exception ex) {
             throw new CacheReadException(ex);
         }
+    }
+    
+    private String createKey(File f) {
+        return f.getName();
+    }
+    
+    private File toFile(Object key) {
+        String k = toKey(key);
+        if (k == null) return null;
+        return new File(DIR, k);
     }
     
     private String toKey(Object key) {
