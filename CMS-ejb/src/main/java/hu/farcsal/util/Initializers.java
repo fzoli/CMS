@@ -18,7 +18,8 @@ public class Initializers {
         K getKey();
     }
     
-    public static interface ObjectInitializer<K, T> extends AutoInitializer<Class<K>, T> {}
+    public static interface ObjectInitializer<K, T extends K> extends AutoInitializer<Class<K>, T> {
+    }
     
     public static abstract class BaseObjectInitializer<T> implements ObjectInitializer<T, T> {
         

@@ -59,6 +59,10 @@ public class ObjectMap<Obj> extends HashMap<Class<? extends Obj>, Obj> {
         return o;
     }
     
+    public <K extends Obj, T extends K> K getObject(Initializers.ObjectInitializer<K, T> initializer) {
+        return getObject(initializer.getKey());
+    }
+    
     public <K extends Obj> K getObject(Class<K> key) {
         synchronized (SYN) {
             Obj o = get(key);
